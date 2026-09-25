@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Halloween 2026 – Einlass</title>
+
+<script src="https://unpkg.com/html5-qrcode"></script>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #080808;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  max-width: 520px;
+  margin: auto;
+  padding: 20px;
+}
+
+.header {
+  text-align: center;
+  padding: 15px 0 25px;
+}
+
+.logo {
+  font-size: 12px;
+  letter-spacing: 4px;
+  color: #888;
+}
+
+h1 {
+  margin: 10px 0 5px;
+  font-size: 32px;
+}
+
+.subtitle {
+  color: #888;
+}
+
+#reader {
+  width: 100%;
+  overflow: hidden;
+  border-radius: 18px;
+  background: #111;
+}
+
+.status {
+  margin-top: 20px;
+  padding: 25px;
+  border-radius: 18px;
+  background: #151515;
+  text-align: center;
+}
+
+.icon {
+  font-size: 55px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.info {
+  color: #ccc;
+  line-height: 1.7;
+}
+
+button {
+  width: 100%;
+  padding: 16px;
+  margin-top: 18px;
+  border: 0;
+  border-radius: 12px;
+  background: #ff6a00;
+  color: white;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+input {
+  width: 100%;
+  padding: 15px;
+  margin-top: 18px;
+  border-radius: 12px;
+  border: 1px solid #333;
+  background: #111;
+  color: white;
+  font-size: 16px;
+}
+
+.green {
+  background: #092b17;
+  border: 2px solid #19d66b;
+}
+
+.red {
+  background: #350909;
+  border: 2px solid #ff3030;
+}
+
+.orange {
+  background: #332300;
+  border: 2px solid #ffb000;
+}
+
+.small {
+  color: #666;
+  font-size: 12px;
+  text-align: center;
+  margin-top: 25px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+
+<div class="logo">
+JB EVENT SERVICE
+</div>
+
+<h1>🎃 EINLASS</h1>
+
+<div class="subtitle">
+Halloween Party 2026
+</div>
+
+</div>
+
+
+<div id="reader"></div>
+
+
+<div id="status" class="status">
+
+<div class="icon">📷</div>
+
+<div class="title">
+Scanner bereit
+</div>
+
+<div class="info">
+QR-Code vor die Kamera halten
+</div>
+
+</div>
+
+
+<input
+id="manual"
+type="text"
+placeholder="Ticket-ID manuell eingeben"
+>
+
+<button onclick="manualCheck()">
+🔎 TICKET PRÜFEN
+</button>
+
+
+<div class="small">
+JB Event Service Ticketsystem
+</div>
+
+</div>
+
+
+<script>
+
+let scanner;
+let locked = false;
+
+
+/*
+ * DEIN BESTEHENDES GOOGLE-APPS-SCRIPT
+ */
+const SCRIPT_URL =
+"https://script.google.com/macros/s/AKfycbyiovw5TRgRqChipAvU5cIvCZ9wSLP69dfOvT_TtBagnDDLj8XjiwUSZERqKZSqQnHF/exec";
+
+
+function startScanner() {
+
+  scanner = new Html5Qrcode("reader");
+
+
+  scanner.start(
+
+    {
+      facingMode: "environment"
+    },
+
+    {
+      fps: 10,
+
+      qrbox: {
+        width: 250,
+        height: 250
+      }
+    },
+
+    function(decodedText) {
+
+      if (locked) return;
+
+      locked = true;
+
+      scanner.stop()
+      .catch(function(){});
+
+      processQR(decodedText);
+
+    },
+
+    function(error) {
+
+      // Scanner sucht weiter
+
+    }
+
+  )
+
+  .catch(function(error) {
+
+    showError(
+      "Kamera konnte nicht gestartet werden. Bitte Kamera-Zugriff erlauben."
+    );
+
+  });
+
+}
+
+
+function processQR(text) {
+
+  let ticketId = text;
+
+
+  /*
+   * Falls der QR-Code einen Link enthält
+   */
+  try {
+
+    const url = new URL(text);
+
+    const id =
+      url.searchParams.get("id");
+
+    if (id) {
+      ticketId = id;
+    }
+
+  } catch(error) {
+
+    // QR-Code kann direkt eine ID enthalten
+
+  }
+
+
+  checkTicket(ticketId);
+
+}
+
+
+function checkTicket(ticketId) {
+
+  ticketId =
+    String(ticketId)
+    .trim()
+    .toUpperCase();
+
+
+  if (!ticketId) {
+
+    showError(
+      "Keine Ticket-ID erkannt."
+    );
+
+    return;
+
+  }
+
+
+  document.getElementById(
+    "status"
+  ).innerHTML = `
+
+    <div class="icon">⏳</div>
+
+    <div class="title">
+      Ticket wird geprüft …
+    </div>
+
+  `;
+
+
+  /*
+   * HIER WIRD SPÄTER DIE API
+   * DES TICKETSYSTEMS ANGESPROCHEN.
+   */
+
+  /*
+   * Zum Test zeigen wir zunächst
+   * die erkannte Ticket-ID.
+   */
+
+  showFound(ticketId);
+
+}
+
+
+function showFound(ticketId) {
+
+  document.getElementById(
+    "status"
+  ).className =
+    "status green";
+
+
+  document.getElementById(
+    "status"
+  ).innerHTML = `
+
+    <div class="icon">
+      ✅
+    </div>
+
+    <div class="title">
+      QR-CODE ERKANNT
+    </div>
+
+    <div class="info">
+
+      Ticket-ID:
+
+      <br><br>
+
+      <b>
+      ${escapeHtml(ticketId)}
+      </b>
+
+    </div>
+
+    <button onclick="resetScanner()">
+      NÄCHSTES TICKET
+    </button>
+
+  `;
+
+}
+
+
+function manualCheck() {
+
+  const value =
+    document.getElementById(
+      "manual"
+    ).value;
+
+  checkTicket(value);
+
+}
+
+
+function resetScanner() {
+
+  location.reload();
+
+}
+
+
+function showError(message) {
+
+  document.getElementById(
+    "status"
+  ).className =
+    "status red";
+
+
+  document.getElementById(
+    "status"
+  ).innerHTML = `
+
+    <div class="icon">
+      ❌
+    </div>
+
+    <div class="title">
+      Fehler
+    </div>
+
+    <div class="info">
+      ${escapeHtml(message)}
+    </div>
+
+    <button onclick="location.reload()">
+      ERNEUT VERSUCHEN
+    </button>
+
+  `;
+
+}
+
+
+function escapeHtml(value) {
+
+  return String(value)
+    .replace(
+      /[&<>"']/g,
+      function(char) {
+
+        return {
+
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#039;"
+
+        }[char];
+
+      }
+    );
+
+}
+
+
+startScanner();
+
+</script>
+
+</body>
+</html>
