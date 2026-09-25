@@ -2,13 +2,15 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
-<title>Halloween 2026 – Einlass</title>
+<title>JB Event Service – Einlass</title>
 
 <script src="https://unpkg.com/html5-qrcode"></script>
 
 <style>
+
 * {
   box-sizing: border-box;
 }
@@ -21,6 +23,7 @@ body {
 }
 
 .container {
+  width: 100%;
   max-width: 520px;
   margin: auto;
   padding: 20px;
@@ -28,13 +31,13 @@ body {
 
 .header {
   text-align: center;
-  padding: 15px 0 25px;
+  padding: 15px 0 20px;
 }
 
 .logo {
   font-size: 12px;
   letter-spacing: 4px;
-  color: #888;
+  color: #999;
 }
 
 h1 {
@@ -61,47 +64,9 @@ h1 {
   text-align: center;
 }
 
-.icon {
-  font-size: 55px;
-}
-
-.title {
-  font-size: 24px;
-  font-weight: bold;
-  margin: 10px 0;
-}
-
-.info {
-  color: #ccc;
-  line-height: 1.7;
-}
-
-button {
-  width: 100%;
-  padding: 16px;
-  margin-top: 18px;
-  border: 0;
-  border-radius: 12px;
-  background: #ff6a00;
-  color: white;
-  font-size: 17px;
-  font-weight: bold;
-}
-
-input {
-  width: 100%;
-  padding: 15px;
-  margin-top: 18px;
-  border-radius: 12px;
-  border: 1px solid #333;
-  background: #111;
-  color: white;
-  font-size: 16px;
-}
-
 .green {
-  background: #092b17;
-  border: 2px solid #19d66b;
+  background: #082b17;
+  border: 2px solid #18d66b;
 }
 
 .red {
@@ -114,12 +79,51 @@ input {
   border: 2px solid #ffb000;
 }
 
+.icon {
+  font-size: 55px;
+}
+
+.title {
+  font-size: 25px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.info {
+  color: #ddd;
+  line-height: 1.7;
+}
+
+button {
+  width: 100%;
+  padding: 17px;
+  margin-top: 18px;
+  border: none;
+  border-radius: 12px;
+  background: #ff6a00;
+  color: white;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+input {
+  width: 100%;
+  padding: 16px;
+  margin-top: 18px;
+  border-radius: 12px;
+  border: 1px solid #333;
+  background: #111;
+  color: white;
+  font-size: 16px;
+}
+
 .small {
+  text-align: center;
   color: #666;
   font-size: 12px;
-  text-align: center;
   margin-top: 25px;
 }
+
 </style>
 </head>
 
@@ -127,159 +131,204 @@ input {
 
 <div class="container">
 
-<div class="header">
+  <div class="header">
 
-<div class="logo">
-JB EVENT SERVICE
-</div>
+    <div class="logo">
+      JB EVENT SERVICE
+    </div>
 
-<h1>🎃 EINLASS</h1>
+    <h1>🎃 EINLASS</h1>
 
-<div class="subtitle">
-Halloween Party 2026
-</div>
+    <div class="subtitle">
+      Halloween Party 2026
+    </div>
 
-</div>
-
-
-<div id="reader"></div>
+  </div>
 
 
-<div id="status" class="status">
-
-<div class="icon">📷</div>
-
-<div class="title">
-Scanner bereit
-</div>
-
-<div class="info">
-QR-Code vor die Kamera halten
-</div>
-
-</div>
+  <div id="reader"></div>
 
 
-<input
-id="manual"
-type="text"
-placeholder="Ticket-ID manuell eingeben"
->
+  <div
+    id="status"
+    class="status"
+  >
 
-<button onclick="manualCheck()">
-🔎 TICKET PRÜFEN
-</button>
+    <div class="icon">
+      📷
+    </div>
+
+    <div class="title">
+      Scanner bereit
+    </div>
+
+    <div class="info">
+      QR-Code vor die Kamera halten
+    </div>
+
+  </div>
 
 
-<div class="small">
-JB Event Service Ticketsystem
-</div>
+  <input
+    id="manual"
+    type="text"
+    placeholder="Ticket-ID manuell eingeben"
+  >
+
+
+  <button onclick="manualCheck()">
+    🔎 TICKET PRÜFEN
+  </button>
+
+
+  <div class="small">
+    JB Event Service Ticketsystem
+  </div>
 
 </div>
 
 
 <script>
 
-let scanner;
-let locked = false;
+/*************************************************
+ * DEINE GOOGLE APPS SCRIPT WEB-APP
+ *************************************************/
 
-
-/*
- * DEIN BESTEHENDES GOOGLE-APPS-SCRIPT
- */
 const SCRIPT_URL =
 "https://script.google.com/macros/s/AKfycbyiovw5TRgRqChipAvU5cIvCZ9wSLP69dfOvT_TtBagnDDLj8XjiwUSZERqKZSqQnHF/exec";
 
 
+let scanner = null;
+
+let scannerRunning = false;
+
+let locked = false;
+
+
+/*************************************************
+ * SCANNER STARTEN
+ *************************************************/
+
 function startScanner() {
 
-  scanner = new Html5Qrcode("reader");
-
-
-  scanner.start(
-
-    {
-      facingMode: "environment"
-    },
-
-    {
-      fps: 10,
-
-      qrbox: {
-        width: 250,
-        height: 250
-      }
-    },
-
-    function(decodedText) {
-
-      if (locked) return;
-
-      locked = true;
-
-      scanner.stop()
-      .catch(function(){});
-
-      processQR(decodedText);
-
-    },
-
-    function(error) {
-
-      // Scanner sucht weiter
-
-    }
-
-  )
-
-  .catch(function(error) {
-
-    showError(
-      "Kamera konnte nicht gestartet werden. Bitte Kamera-Zugriff erlauben."
+  scanner =
+    new Html5Qrcode(
+      "reader"
     );
 
-  });
 
+  scanner
+    .start(
+
+      {
+        facingMode:
+          "environment"
+      },
+
+      {
+        fps: 10,
+
+        qrbox: {
+          width: 250,
+          height: 250
+        }
+      },
+
+      function(decodedText) {
+
+        if (locked) {
+          return;
+        }
+
+        locked = true;
+
+        processQR(
+          decodedText
+        );
+
+      },
+
+      function(errorMessage) {
+
+        // Scanner sucht weiter
+
+      }
+
+    )
+    .then(function() {
+
+      scannerRunning = true;
+
+    })
+    .catch(function(error) {
+
+      showError(
+        "Kamera konnte nicht gestartet werden."
+      );
+
+    });
 }
 
 
-function processQR(text) {
+/*************************************************
+ * QR-CODE VERARBEITEN
+ *************************************************/
 
-  let ticketId = text;
+function processQR(
+  text
+) {
+
+  let ticketId =
+    String(text)
+      .trim();
 
 
   /*
-   * Falls der QR-Code einen Link enthält
+   * Wenn der QR-Code eine URL enthält
    */
+
   try {
 
-    const url = new URL(text);
+    const url =
+      new URL(text);
 
     const id =
-      url.searchParams.get("id");
+      url.searchParams.get(
+        "id"
+      );
 
     if (id) {
+
       ticketId = id;
+
     }
 
-  } catch(error) {
+  }
+  catch(error) {
 
-    // QR-Code kann direkt eine ID enthalten
+    // QR-Code kann direkt eine Ticket-ID sein
 
   }
 
 
-  checkTicket(ticketId);
-
+  checkTicket(
+    ticketId
+  );
 }
 
 
-function checkTicket(ticketId) {
+/*************************************************
+ * TICKET PRÜFEN
+ *************************************************/
+
+function checkTicket(
+  ticketId
+) {
 
   ticketId =
-    String(ticketId)
-    .trim()
-    .toUpperCase();
+    String(ticketId || "")
+      .trim()
+      .toUpperCase();
 
 
   if (!ticketId) {
@@ -293,35 +342,165 @@ function checkTicket(ticketId) {
   }
 
 
-  document.getElementById(
-    "status"
-  ).innerHTML = `
-
-    <div class="icon">⏳</div>
-
-    <div class="title">
-      Ticket wird geprüft …
-    </div>
-
-  `;
+  showLoading(
+    "Ticket wird geprüft …"
+  );
 
 
-  /*
-   * HIER WIRD SPÄTER DIE API
-   * DES TICKETSYSTEMS ANGESPROCHEN.
-   */
+  const callbackName =
+    "ticketCheck_" +
+    Date.now();
 
-  /*
-   * Zum Test zeigen wir zunächst
-   * die erkannte Ticket-ID.
-   */
 
-  showFound(ticketId);
+  window[callbackName] =
+    function(ticket) {
 
+      try {
+
+        displayTicket(
+          ticket
+        );
+
+      }
+      finally {
+
+        delete window[
+          callbackName
+        ];
+
+      }
+
+    };
+
+
+  const script =
+    document.createElement(
+      "script"
+    );
+
+
+  script.src =
+    SCRIPT_URL +
+    "?action=check" +
+    "&id=" +
+    encodeURIComponent(
+      ticketId
+    ) +
+    "&callback=" +
+    callbackName;
+
+
+  script.onerror =
+    function() {
+
+      delete window[
+        callbackName
+      ];
+
+      showError(
+        "Google-Ticketsystem nicht erreichbar."
+      );
+
+    };
+
+
+  document.body.appendChild(
+    script
+  );
 }
 
 
-function showFound(ticketId) {
+/*************************************************
+ * TICKET ANZEIGEN
+ *************************************************/
+
+function displayTicket(
+  ticket
+) {
+
+  /*
+   * NICHT GEFUNDEN
+   */
+
+  if (!ticket.found) {
+
+    showError(
+      "TICKET NICHT GEFUNDEN"
+    );
+
+    return;
+  }
+
+
+  /*
+   * BEREITS EINGELÖST
+   */
+
+  if (
+    ticket.alreadyUsed
+  ) {
+
+    document.getElementById(
+      "status"
+    ).className =
+      "status orange";
+
+
+    document.getElementById(
+      "status"
+    ).innerHTML = `
+
+      <div class="icon">
+        ⚠️
+      </div>
+
+      <div class="title">
+        BEREITS EINGELÖST
+      </div>
+
+      <div class="info">
+
+        <b>
+          ${escapeHtml(
+            ticket.name
+          )}
+        </b>
+
+        <br>
+
+        ${escapeHtml(
+          ticket.ticketType
+        )}
+
+        <br><br>
+
+        Ticket-ID:
+
+        <br>
+
+        <b>
+          ${escapeHtml(
+            ticket.ticketId
+          )}
+        </b>
+
+      </div>
+
+      <button
+        onclick="resetScanner()"
+      >
+        NÄCHSTES TICKET
+      </button>
+
+    `;
+
+    return;
+  }
+
+
+  /*
+   * GÜLTIG
+   */
 
   document.getElementById(
     "status"
@@ -338,29 +517,193 @@ function showFound(ticketId) {
     </div>
 
     <div class="title">
-      QR-CODE ERKANNT
+      TICKET GÜLTIG
     </div>
 
     <div class="info">
 
-      Ticket-ID:
+      <b>
+        ${escapeHtml(
+          ticket.name
+        )}
+      </b>
+
+      <br>
+
+      ${escapeHtml(
+        ticket.ticketType
+      )}
+
+      <br>
+
+      ${Number(
+        ticket.price
+      ).toFixed(2)} €
 
       <br><br>
 
+      Ticket-ID:
+
+      <br>
+
       <b>
-      ${escapeHtml(ticketId)}
+        ${escapeHtml(
+          ticket.ticketId
+        )}
       </b>
 
     </div>
 
-    <button onclick="resetScanner()">
-      NÄCHSTES TICKET
+    <button
+      onclick="redeemTicket(
+        '${escapeJs(
+          ticket.ticketId
+        )}'
+      )"
+    >
+      ✅ EINLASS GEWÄHREN
     </button>
 
   `;
-
 }
 
+
+/*************************************************
+ * TICKET EINLÖSEN
+ *************************************************/
+
+function redeemTicket(
+  ticketId
+) {
+
+  showLoading(
+    "Ticket wird eingelöst …"
+  );
+
+
+  const callbackName =
+    "ticketRedeem_" +
+    Date.now();
+
+
+  window[callbackName] =
+    function(result) {
+
+      try {
+
+        if (
+          result.success
+        ) {
+
+          document.getElementById(
+            "status"
+          ).className =
+            "status green";
+
+
+          document.getElementById(
+            "status"
+          ).innerHTML = `
+
+            <div class="icon">
+              🎉
+            </div>
+
+            <div class="title">
+              EINLASS GEWÄHRT
+            </div>
+
+            <div class="info">
+
+              <b>
+                ${escapeHtml(
+                  result.name
+                )}
+              </b>
+
+              <br>
+
+              ${escapeHtml(
+                result.ticketType
+              )}
+
+              <br><br>
+
+              Ticket wurde erfolgreich
+              eingelöst.
+
+            </div>
+
+            <button
+              onclick="resetScanner()"
+            >
+              NÄCHSTES TICKET
+            </button>
+
+          `;
+
+        }
+        else {
+
+          showError(
+            result.message ||
+            "Ticket konnte nicht eingelöst werden."
+          );
+
+        }
+
+      }
+      finally {
+
+        delete window[
+          callbackName
+        ];
+
+      }
+
+    };
+
+
+  const script =
+    document.createElement(
+      "script"
+    );
+
+
+  script.src =
+    SCRIPT_URL +
+    "?action=redeem" +
+    "&id=" +
+    encodeURIComponent(
+      ticketId
+    ) +
+    "&callback=" +
+    callbackName;
+
+
+  script.onerror =
+    function() {
+
+      delete window[
+        callbackName
+      ];
+
+      showError(
+        "Google-Ticketsystem nicht erreichbar."
+      );
+
+    };
+
+
+  document.body.appendChild(
+    script
+  );
+}
+
+
+/*************************************************
+ * MANUELLE TICKET-ID
+ *************************************************/
 
 function manualCheck() {
 
@@ -369,19 +712,52 @@ function manualCheck() {
       "manual"
     ).value;
 
-  checkTicket(value);
 
+  checkTicket(
+    value
+  );
 }
 
 
-function resetScanner() {
+/*************************************************
+ * LADEN
+ *************************************************/
 
-  location.reload();
+function showLoading(
+  message
+) {
 
+  document.getElementById(
+    "status"
+  ).className =
+    "status";
+
+
+  document.getElementById(
+    "status"
+  ).innerHTML = `
+
+    <div class="icon">
+      ⏳
+    </div>
+
+    <div class="title">
+      ${escapeHtml(
+        message
+      )}
+    </div>
+
+  `;
 }
 
 
-function showError(message) {
+/*************************************************
+ * FEHLER
+ *************************************************/
+
+function showError(
+  message
+) {
 
   document.getElementById(
     "status"
@@ -398,14 +774,14 @@ function showError(message) {
     </div>
 
     <div class="title">
-      Fehler
+      ${escapeHtml(
+        message
+      )}
     </div>
 
-    <div class="info">
-      ${escapeHtml(message)}
-    </div>
-
-    <button onclick="location.reload()">
+    <button
+      onclick="resetScanner()"
+    >
       ERNEUT VERSUCHEN
     </button>
 
@@ -414,28 +790,78 @@ function showError(message) {
 }
 
 
-function escapeHtml(value) {
+/*************************************************
+ * SCANNER ZURÜCKSETZEN
+ *************************************************/
 
-  return String(value)
-    .replace(
-      /[&<>"']/g,
-      function(char) {
+function resetScanner() {
 
-        return {
-
-          "&": "&amp;",
-          "<": "&lt;",
-          ">": "&gt;",
-          '"': "&quot;",
-          "'": "&#039;"
-
-        }[char];
-
-      }
-    );
+  location.reload();
 
 }
 
+
+/*************************************************
+ * SICHERHEIT
+ *************************************************/
+
+function escapeHtml(
+  value
+) {
+
+  return String(
+    value
+  ).replace(
+    /[&<>"']/g,
+    function(char) {
+
+      return {
+
+        "&":
+          "&amp;",
+
+        "<":
+          "&lt;",
+
+        ">":
+          "&gt;",
+
+        '"':
+          "&quot;",
+
+        "'":
+          "&#039;"
+
+      }[char];
+
+    }
+  );
+
+}
+
+
+function escapeJs(
+  value
+) {
+
+  return String(
+    value
+  )
+  .replace(
+    /\\/g,
+    "\\\\"
+  )
+  .replace(
+    /'/g,
+    "\\'"
+  );
+
+}
+
+
+/*************************************************
+ * START
+ *************************************************/
 
 startScanner();
 
