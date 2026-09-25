@@ -1,198 +1,1056 @@
 <!DOCTYPE html>
 <html lang="de">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
 
-<title>JB Event Service – Einlass</title>
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width,
+               initial-scale=1.0,
+               maximum-scale=1.0,
+               user-scalable=no">
+
+<meta name="theme-color"
+      content="#111111">
+
+<title>JB Event Service</title>
 
 <script src="https://unpkg.com/html5-qrcode"></script>
 
 <style>
 
+/* =================================================
+   GRUNDLAYOUT
+================================================= */
+
 * {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+  background: #111111;
+  color: #ffffff;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
 }
 
 body {
-  margin: 0;
-  background: #080808;
-  color: white;
-  font-family: Arial, sans-serif;
+  overflow-x: hidden;
 }
 
-.container {
-  width: 100%;
-  max-width: 520px;
-  margin: auto;
-  padding: 20px;
+
+/* =================================================
+   SPLASH SCREEN
+================================================= */
+
+#splash {
+
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 9999;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  align-items: center;
+
+  background:
+    radial-gradient(
+      circle at center,
+      #303030 0%,
+      #191919 45%,
+      #0d0d0d 100%
+    );
+
+  transition:
+    opacity 0.8s ease,
+    visibility 0.8s ease;
+
 }
+
+
+#splash.hide {
+
+  opacity: 0;
+
+  visibility: hidden;
+
+}
+
+
+.splash-logo {
+
+  width: 230px;
+
+  max-width: 70vw;
+
+  filter: invert(1);
+
+  opacity: 0;
+
+  transform:
+    scale(0.92)
+    translateY(10px);
+
+  animation:
+    logoIn 1.1s
+    cubic-bezier(.2,.8,.2,1)
+    forwards;
+
+}
+
+
+.splash-slogan {
+
+  margin-top: 30px;
+
+  font-size: 14px;
+
+  letter-spacing: 3px;
+
+  color: #cfcfcf;
+
+  text-align: center;
+
+  opacity: 0;
+
+  animation:
+    sloganIn 1s
+    ease
+    0.6s
+    forwards;
+
+}
+
+
+@keyframes logoIn {
+
+  to {
+
+    opacity: 1;
+
+    transform:
+      scale(1)
+      translateY(0);
+
+  }
+
+}
+
+
+@keyframes sloganIn {
+
+  to {
+
+    opacity: 1;
+
+  }
+
+}
+
+
+/* =================================================
+   APP
+================================================= */
+
+#app {
+
+  min-height: 100vh;
+
+  padding:
+    max(25px, env(safe-area-inset-top))
+    20px
+    max(25px, env(safe-area-inset-bottom))
+    20px;
+
+  opacity: 0;
+
+  transform:
+    translateY(15px);
+
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s ease;
+
+}
+
+
+#app.show {
+
+  opacity: 1;
+
+  transform:
+    translateY(0);
+
+}
+
+
+.app-container {
+
+  width: 100%;
+
+  max-width: 520px;
+
+  margin: auto;
+
+}
+
+
+/* =================================================
+   HEADER
+================================================= */
 
 .header {
-  text-align: center;
-  padding: 15px 0 20px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  margin-bottom: 24px;
+
 }
 
-.logo {
-  font-size: 12px;
-  letter-spacing: 4px;
-  color: #999;
+
+.header-brand {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
 }
 
-h1 {
-  margin: 10px 0 5px;
-  font-size: 32px;
+
+.header-logo {
+
+  width: 55px;
+
+  height: 55px;
+
+  object-fit: contain;
+
+  filter: invert(1);
+
 }
 
-.subtitle {
+
+.header-text {
+
+  display: flex;
+
+  flex-direction: column;
+
+}
+
+
+.brand-name {
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  letter-spacing: 2px;
+
+}
+
+
+.brand-sub {
+
+  margin-top: 3px;
+
+  font-size: 11px;
+
   color: #888;
+
+  letter-spacing: 1px;
+
 }
+
+
+.live-indicator {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  padding:
+    8px
+    11px;
+
+  border-radius: 30px;
+
+  background:
+    rgba(255,255,255,0.06);
+
+  border:
+    1px solid
+    rgba(255,255,255,0.08);
+
+  color: #aaa;
+
+  font-size: 10px;
+
+  letter-spacing: 1px;
+
+}
+
+
+.live-dot {
+
+  width: 7px;
+
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: #6ee7a0;
+
+  box-shadow:
+    0 0 10px
+    rgba(110,231,160,.7);
+
+}
+
+
+/* =================================================
+   EVENT CARD
+================================================= */
+
+.event-card {
+
+  position: relative;
+
+  overflow: hidden;
+
+  padding: 25px;
+
+  border-radius: 25px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #292929,
+      #181818
+    );
+
+  border:
+    1px solid
+    rgba(255,255,255,0.08);
+
+  box-shadow:
+    0 20px 50px
+    rgba(0,0,0,.35);
+
+  margin-bottom: 20px;
+
+}
+
+
+.event-card::after {
+
+  content: "";
+
+  position: absolute;
+
+  width: 180px;
+
+  height: 180px;
+
+  right: -80px;
+
+  top: -80px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(255,255,255,.035);
+
+}
+
+
+.event-small {
+
+  font-size: 10px;
+
+  color: #999;
+
+  letter-spacing: 3px;
+
+  text-transform: uppercase;
+
+}
+
+
+.event-title {
+
+  margin-top: 9px;
+
+  font-size: 29px;
+
+  font-weight: 700;
+
+  letter-spacing: -0.8px;
+
+}
+
+
+.event-subtitle {
+
+  margin-top: 6px;
+
+  font-size: 13px;
+
+  color: #aaa;
+
+}
+
+
+/* =================================================
+   SCANNER CARD
+================================================= */
+
+.scanner-card {
+
+  padding: 12px;
+
+  border-radius: 27px;
+
+  background:
+    #1b1b1b;
+
+  border:
+    1px solid
+    rgba(255,255,255,.08);
+
+  box-shadow:
+    0 25px 60px
+    rgba(0,0,0,.35);
+
+}
+
 
 #reader {
+
   width: 100%;
+
+  min-height: 280px;
+
   overflow: hidden;
-  border-radius: 18px;
-  background: #111;
+
+  border-radius: 20px;
+
+  background: #0c0c0c;
+
 }
 
-.status {
+
+#reader video {
+
+  width: 100% !important;
+
+  height: auto !important;
+
+  border-radius: 20px;
+
+}
+
+
+#reader img {
+
+  display: none !important;
+
+}
+
+
+/* =================================================
+   SCANNER HINWEIS
+================================================= */
+
+.scanner-hint {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 8px;
+
+  padding: 14px 5px 5px;
+
+  color: #777;
+
+  font-size: 11px;
+
+}
+
+
+.scanner-hint-dot {
+
+  width: 5px;
+
+  height: 5px;
+
+  background: #777;
+
+  border-radius: 50%;
+
+}
+
+
+/* =================================================
+   MANUELLE EINGABE
+================================================= */
+
+.manual-card {
+
   margin-top: 20px;
-  padding: 25px;
-  border-radius: 18px;
-  background: #151515;
-  text-align: center;
+
+  padding: 20px;
+
+  border-radius: 22px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #232323,
+      #171717
+    );
+
+  border:
+    1px solid
+    rgba(255,255,255,.07);
+
+  box-shadow:
+    0 15px 40px
+    rgba(0,0,0,.25);
+
 }
 
-.green {
-  background: #082b17;
-  border: 2px solid #18d66b;
+
+.input-label {
+
+  margin-bottom: 10px;
+
+  font-size: 11px;
+
+  color: #888;
+
+  letter-spacing: 1.5px;
+
+  text-transform: uppercase;
+
 }
 
-.red {
-  background: #350909;
-  border: 2px solid #ff3030;
-}
-
-.orange {
-  background: #332300;
-  border: 2px solid #ffb000;
-}
-
-.icon {
-  font-size: 55px;
-}
-
-.title {
-  font-size: 25px;
-  font-weight: bold;
-  margin: 10px 0;
-}
-
-.info {
-  color: #ddd;
-  line-height: 1.7;
-}
-
-button {
-  width: 100%;
-  padding: 17px;
-  margin-top: 18px;
-  border: none;
-  border-radius: 12px;
-  background: #ff6a00;
-  color: white;
-  font-size: 17px;
-  font-weight: bold;
-}
 
 input {
+
   width: 100%;
-  padding: 16px;
-  margin-top: 18px;
-  border-radius: 12px;
-  border: 1px solid #333;
-  background: #111;
-  color: white;
-  font-size: 16px;
+
+  height: 54px;
+
+  padding:
+    0
+    16px;
+
+  border:
+    1px solid
+    #333;
+
+  border-radius: 15px;
+
+  outline: none;
+
+  background:
+    #101010;
+
+  color: #ffffff;
+
+  font-size: 15px;
+
+  font-family:
+    monospace;
+
+  transition:
+    border .2s ease,
+    box-shadow .2s ease;
+
 }
 
-.small {
+
+input:focus {
+
+  border-color:
+    #777;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(255,255,255,.04);
+
+}
+
+
+input::placeholder {
+
+  color: #555;
+
+}
+
+
+/* =================================================
+   BUTTON
+================================================= */
+
+.main-button {
+
+  width: 100%;
+
+  height: 56px;
+
+  margin-top: 12px;
+
+  border: none;
+
+  border-radius: 15px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #eeeeee,
+      #bdbdbd
+    );
+
+  color: #111;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  letter-spacing: 1px;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 10px 25px
+    rgba(0,0,0,.3);
+
+  transition:
+    transform .15s ease,
+    box-shadow .15s ease;
+
+}
+
+
+.main-button:active {
+
+  transform:
+    scale(.98);
+
+  box-shadow:
+    0 5px 15px
+    rgba(0,0,0,.25);
+
+}
+
+
+/* =================================================
+   STATUS
+================================================= */
+
+.status {
+
+  margin-top: 20px;
+
+  padding: 25px;
+
+  border-radius: 23px;
+
   text-align: center;
-  color: #666;
+
+  background:
+    linear-gradient(
+      145deg,
+      #242424,
+      #171717
+    );
+
+  border:
+    1px solid
+    rgba(255,255,255,.07);
+
+  box-shadow:
+    0 20px 45px
+    rgba(0,0,0,.3);
+
+  animation:
+    statusIn .35s ease;
+
+}
+
+
+@keyframes statusIn {
+
+  from {
+
+    opacity: 0;
+
+    transform:
+      translateY(10px);
+
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform:
+      translateY(0);
+
+  }
+
+}
+
+
+.status-icon {
+
+  width: 64px;
+
+  height: 64px;
+
+  margin:
+    0
+    auto
+    15px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 50%;
+
+  font-size: 29px;
+
+}
+
+
+.status-valid {
+
+  border:
+    1px solid
+    rgba(110,231,160,.4);
+
+  background:
+    rgba(110,231,160,.08);
+
+}
+
+
+.status-invalid {
+
+  border:
+    1px solid
+    rgba(255,90,90,.4);
+
+  background:
+    rgba(255,90,90,.08);
+
+}
+
+
+.status-used {
+
+  border:
+    1px solid
+    rgba(255,190,70,.4);
+
+  background:
+    rgba(255,190,70,.08);
+
+}
+
+
+.status-title {
+
+  font-size: 23px;
+
+  font-weight: 700;
+
+}
+
+
+.status-info {
+
+  margin-top: 12px;
+
+  color: #aaa;
+
+  line-height: 1.7;
+
+  font-size: 14px;
+
+}
+
+
+.status-name {
+
+  color: #fff;
+
+  font-size: 19px;
+
+  font-weight: 600;
+
+}
+
+
+.ticket-id {
+
+  margin-top: 12px;
+
+  padding: 9px;
+
+  border-radius: 10px;
+
+  background:
+    rgba(0,0,0,.3);
+
+  color: #aaa;
+
+  font-family: monospace;
+
   font-size: 12px;
-  margin-top: 25px;
+
+}
+
+
+/* =================================================
+   FOOTER
+================================================= */
+
+.footer {
+
+  margin-top: 30px;
+
+  text-align: center;
+
+  color: #555;
+
+  font-size: 10px;
+
+  letter-spacing: 1.5px;
+
+}
+
+
+/* =================================================
+   MOBILE
+================================================= */
+
+@media (
+  max-width: 380px
+) {
+
+  .event-title {
+
+    font-size: 25px;
+
+  }
+
+  .event-card {
+
+    padding: 21px;
+
+  }
+
 }
 
 </style>
+
 </head>
+
 
 <body>
 
-<div class="container">
+
+<!-- =================================================
+     SPLASH
+================================================= -->
+
+<div id="splash">
+
+  <img
+    src="IMG_2752.jpeg"
+    class="splash-logo"
+    alt="JB Event Service"
+  >
+
+  <div class="splash-slogan">
+
+    DEIN EVENT. UNSER SERVICE.
+
+  </div>
+
+</div>
+
+
+<!-- =================================================
+     APP
+================================================= -->
+
+<div id="app">
+
+<div class="app-container">
+
+
+  <!-- HEADER -->
 
   <div class="header">
 
-    <div class="logo">
-      JB EVENT SERVICE
+    <div class="header-brand">
+
+      <img
+        src="IMG_2752.jpeg"
+        class="header-logo"
+        alt="JB"
+      >
+
+      <div class="header-text">
+
+        <div class="brand-name">
+          JB EVENT SERVICE
+        </div>
+
+        <div class="brand-sub">
+          EINLASS SYSTEM
+        </div>
+
+      </div>
+
     </div>
 
-    <h1>🎃 EINLASS</h1>
 
-    <div class="subtitle">
+    <div class="live-indicator">
+
+      <span class="live-dot"></span>
+
+      LIVE
+
+    </div>
+
+  </div>
+
+
+  <!-- EVENT -->
+
+  <div class="event-card">
+
+    <div class="event-small">
+      EVENT
+    </div>
+
+    <div class="event-title">
       Halloween Party 2026
     </div>
 
+    <div class="event-subtitle">
+      Digitaler Einlass · JB Event Service
+    </div>
+
   </div>
 
 
-  <div id="reader"></div>
+  <!-- SCANNER -->
 
+  <div class="scanner-card">
 
-  <div
-    id="status"
-    class="status"
-  >
+    <div id="reader"></div>
 
-    <div class="icon">
-      📷
-    </div>
+    <div class="scanner-hint">
 
-    <div class="title">
-      Scanner bereit
-    </div>
+      <span class="scanner-hint-dot"></span>
 
-    <div class="info">
       QR-Code vor die Kamera halten
+
     </div>
 
   </div>
 
 
-  <input
-    id="manual"
-    type="text"
-    placeholder="Ticket-ID manuell eingeben"
-  >
+  <!-- MANUELLE EINGABE -->
 
+  <div class="manual-card">
 
-  <button onclick="manualCheck()">
-    🔎 TICKET PRÜFEN
-  </button>
+    <div class="input-label">
+      Alternative
+    </div>
 
+    <input
+      id="manual"
+      type="text"
+      autocomplete="off"
+      autocapitalize="characters"
+      placeholder="Ticket-ID eingeben"
+    >
 
-  <div class="small">
-    JB Event Service Ticketsystem
+    <button
+      class="main-button"
+      onclick="manualCheck()"
+    >
+
+      TICKET PRÜFEN
+
+    </button>
+
   </div>
+
+
+  <!-- STATUS -->
+
+  <div id="status"></div>
+
+
+  <!-- FOOTER -->
+
+  <div class="footer">
+
+    DEIN EVENT. UNSER SERVICE.
+
+  </div>
+
+
+</div>
 
 </div>
 
 
 <script>
 
-/*************************************************
- * DEINE GOOGLE APPS SCRIPT WEB-APP
- *************************************************/
+/* =================================================
+   GOOGLE APPS SCRIPT
+================================================= */
 
 const SCRIPT_URL =
 "https://script.google.com/macros/s/AKfycbyiovw5TRgRqChipAvU5cIvCZ9wSLP69dfOvT_TtBagnDDLj8XjiwUSZERqKZSqQnHF/exec";
@@ -200,14 +1058,41 @@ const SCRIPT_URL =
 
 let scanner = null;
 
-let scannerRunning = false;
-
 let locked = false;
 
 
-/*************************************************
- * SCANNER STARTEN
- *************************************************/
+/* =================================================
+   SPLASH
+================================================= */
+
+window.addEventListener(
+  "load",
+  function() {
+
+    setTimeout(
+      function() {
+
+        document
+          .getElementById("splash")
+          .classList
+          .add("hide");
+
+        document
+          .getElementById("app")
+          .classList
+          .add("show");
+
+      },
+      2300
+    );
+
+  }
+);
+
+
+/* =================================================
+   SCANNER STARTEN
+================================================= */
 
 function startScanner() {
 
@@ -229,8 +1114,8 @@ function startScanner() {
         fps: 10,
 
         qrbox: {
-          width: 250,
-          height: 250
+          width: 230,
+          height: 230
         }
       },
 
@@ -248,31 +1133,47 @@ function startScanner() {
 
       },
 
-      function(errorMessage) {
+      function() {
 
-        // Scanner sucht weiter
+        // Scanner läuft weiter
 
       }
 
     )
-    .then(function() {
+    .catch(
+      function() {
 
-      scannerRunning = true;
+        document
+          .getElementById("reader")
+          .innerHTML = `
 
-    })
-    .catch(function(error) {
+            <div style="
+              height:280px;
+              display:flex;
+              align-items:center;
+              justify-content:center;
+              text-align:center;
+              color:#777;
+              padding:30px;
+              font-size:13px;
+            ">
 
-      showError(
-        "Kamera konnte nicht gestartet werden."
-      );
+              Kamera konnte nicht gestartet werden.<br>
+              Bitte Kameraberechtigung prüfen.
 
-    });
+            </div>
+
+          `;
+
+      }
+    );
+
 }
 
 
-/*************************************************
- * QR-CODE VERARBEITEN
- *************************************************/
+/* =================================================
+   QR VERARBEITEN
+================================================= */
 
 function processQR(
   text
@@ -282,10 +1183,6 @@ function processQR(
     String(text)
       .trim();
 
-
-  /*
-   * Wenn der QR-Code eine URL enthält
-   */
 
   try {
 
@@ -304,9 +1201,9 @@ function processQR(
     }
 
   }
-  catch(error) {
+  catch(e) {
 
-    // QR-Code kann direkt eine Ticket-ID sein
+    // Direkte Ticket-ID
 
   }
 
@@ -314,12 +1211,13 @@ function processQR(
   checkTicket(
     ticketId
   );
+
 }
 
 
-/*************************************************
- * TICKET PRÜFEN
- *************************************************/
+/* =================================================
+   TICKET PRÜFEN
+================================================= */
 
 function checkTicket(
   ticketId
@@ -342,33 +1240,24 @@ function checkTicket(
   }
 
 
-  showLoading(
-    "Ticket wird geprüft …"
-  );
+  showLoading();
 
 
   const callbackName =
-    "ticketCheck_" +
+    "check_" +
     Date.now();
 
 
   window[callbackName] =
     function(ticket) {
 
-      try {
+      displayTicket(
+        ticket
+      );
 
-        displayTicket(
-          ticket
-        );
-
-      }
-      finally {
-
-        delete window[
-          callbackName
-        ];
-
-      }
+      delete window[
+        callbackName
+      ];
 
     };
 
@@ -398,7 +1287,7 @@ function checkTicket(
       ];
 
       showError(
-        "Google-Ticketsystem nicht erreichbar."
+        "Verbindung zum Ticketsystem fehlgeschlagen."
       );
 
     };
@@ -407,20 +1296,18 @@ function checkTicket(
   document.body.appendChild(
     script
   );
+
 }
 
 
-/*************************************************
- * TICKET ANZEIGEN
- *************************************************/
+/* =================================================
+   TICKET ANZEIGEN
+================================================= */
 
 function displayTicket(
   ticket
 ) {
 
-  /*
-   * NICHT GEFUNDEN
-   */
 
   if (!ticket.found) {
 
@@ -429,237 +1316,224 @@ function displayTicket(
     );
 
     return;
+
   }
 
-
-  /*
-   * BEREITS EINGELÖST
-   */
 
   if (
     ticket.alreadyUsed
   ) {
 
-    document.getElementById(
-      "status"
-    ).className =
-      "status orange";
+    document
+      .getElementById("status")
+      .innerHTML = `
 
+        <div class="status status-used">
 
-    document.getElementById(
-      "status"
-    ).innerHTML = `
+          <div class="status-icon">
+            ⚠️
+          </div>
 
-      <div class="icon">
-        ⚠️
-      </div>
+          <div class="status-title">
+            BEREITS EINGELÖST
+          </div>
 
-      <div class="title">
-        BEREITS EINGELÖST
-      </div>
+          <div class="status-info">
 
-      <div class="info">
+            <div class="status-name">
+              ${escapeHtml(
+                ticket.name
+              )}
+            </div>
 
-        <b>
-          ${escapeHtml(
-            ticket.name
-          )}
-        </b>
+            ${escapeHtml(
+              ticket.ticketType
+            )}
 
-        <br>
+          </div>
 
-        ${escapeHtml(
-          ticket.ticketType
-        )}
+          <div class="ticket-id">
 
-        <br><br>
+            ${escapeHtml(
+              ticket.ticketId
+            )}
 
-        Ticket-ID:
+          </div>
 
-        <br>
+          <button
+            class="main-button"
+            onclick="resetScanner()"
+          >
 
-        <b>
-          ${escapeHtml(
-            ticket.ticketId
-          )}
-        </b>
+            NÄCHSTES TICKET
 
-      </div>
+          </button>
 
-      <button
-        onclick="resetScanner()"
-      >
-        NÄCHSTES TICKET
-      </button>
+        </div>
 
-    `;
+      `;
 
     return;
+
   }
 
 
-  /*
-   * GÜLTIG
-   */
+  document
+    .getElementById("status")
+    .innerHTML = `
 
-  document.getElementById(
-    "status"
-  ).className =
-    "status green";
+      <div class="status status-valid">
 
+        <div class="status-icon">
+          ✓
+        </div>
 
-  document.getElementById(
-    "status"
-  ).innerHTML = `
+        <div class="status-title">
+          TICKET GÜLTIG
+        </div>
 
-    <div class="icon">
-      ✅
-    </div>
+        <div class="status-info">
 
-    <div class="title">
-      TICKET GÜLTIG
-    </div>
+          <div class="status-name">
 
-    <div class="info">
+            ${escapeHtml(
+              ticket.name
+            )}
 
-      <b>
-        ${escapeHtml(
-          ticket.name
-        )}
-      </b>
+          </div>
 
-      <br>
+          ${escapeHtml(
+            ticket.ticketType
+          )}
 
-      ${escapeHtml(
-        ticket.ticketType
-      )}
+          <br>
 
-      <br>
+          ${Number(
+            ticket.price
+          ).toFixed(2)} €
 
-      ${Number(
-        ticket.price
-      ).toFixed(2)} €
+        </div>
 
-      <br><br>
+        <div class="ticket-id">
 
-      Ticket-ID:
+          ${escapeHtml(
+            ticket.ticketId
+          )}
 
-      <br>
+        </div>
 
-      <b>
-        ${escapeHtml(
-          ticket.ticketId
-        )}
-      </b>
+        <button
+          class="main-button"
+          onclick="redeemTicket(
+            '${escapeJs(
+              ticket.ticketId
+            )}'
+          )"
+        >
 
-    </div>
+          EINLASS GEWÄHREN
 
-    <button
-      onclick="redeemTicket(
-        '${escapeJs(
-          ticket.ticketId
-        )}'
-      )"
-    >
-      ✅ EINLASS GEWÄHREN
-    </button>
+        </button>
 
-  `;
+      </div>
+
+    `;
+
 }
 
 
-/*************************************************
- * TICKET EINLÖSEN
- *************************************************/
+/* =================================================
+   EINLASS
+================================================= */
 
 function redeemTicket(
   ticketId
 ) {
 
-  showLoading(
-    "Ticket wird eingelöst …"
-  );
+  showLoading();
 
 
   const callbackName =
-    "ticketRedeem_" +
+    "redeem_" +
     Date.now();
 
 
   window[callbackName] =
     function(result) {
 
-      try {
+      if (
+        result.success
+      ) {
 
-        if (
-          result.success
-        ) {
+        document
+          .getElementById("status")
+          .innerHTML = `
 
-          document.getElementById(
-            "status"
-          ).className =
-            "status green";
+            <div class="status status-valid">
 
+              <div class="status-icon">
+                ✓
+              </div>
 
-          document.getElementById(
-            "status"
-          ).innerHTML = `
+              <div class="status-title">
+                EINLASS GEWÄHRT
+              </div>
 
-            <div class="icon">
-              🎉
-            </div>
+              <div class="status-info">
 
-            <div class="title">
-              EINLASS GEWÄHRT
-            </div>
+                <div class="status-name">
 
-            <div class="info">
+                  ${escapeHtml(
+                    result.name
+                  )}
 
-              <b>
+                </div>
+
                 ${escapeHtml(
-                  result.name
+                  result.ticketType
                 )}
-              </b>
 
-              <br>
+                <br><br>
 
-              ${escapeHtml(
-                result.ticketType
-              )}
+                Ticket erfolgreich eingelöst.
 
-              <br><br>
+              </div>
 
-              Ticket wurde erfolgreich
-              eingelöst.
+              <div class="ticket-id">
+
+                ${escapeHtml(
+                  result.ticketId
+                )}
+
+              </div>
+
+              <button
+                class="main-button"
+                onclick="resetScanner()"
+              >
+
+                NÄCHSTES TICKET
+
+              </button>
 
             </div>
-
-            <button
-              onclick="resetScanner()"
-            >
-              NÄCHSTES TICKET
-            </button>
 
           `;
 
-        }
-        else {
+      }
+      else {
 
-          showError(
-            result.message ||
-            "Ticket konnte nicht eingelöst werden."
-          );
-
-        }
+        showError(
+          result.message ||
+          "Ticket konnte nicht eingelöst werden."
+        );
 
       }
-      finally {
 
-        delete window[
-          callbackName
-        ];
 
-      }
+      delete window[
+        callbackName
+      ];
 
     };
 
@@ -689,7 +1563,7 @@ function redeemTicket(
       ];
 
       showError(
-        "Google-Ticketsystem nicht erreichbar."
+        "Verbindung fehlgeschlagen."
       );
 
     };
@@ -698,112 +1572,121 @@ function redeemTicket(
   document.body.appendChild(
     script
   );
+
 }
 
 
-/*************************************************
- * MANUELLE TICKET-ID
- *************************************************/
+/* =================================================
+   MANUELLE EINGABE
+================================================= */
 
 function manualCheck() {
 
   const value =
-    document.getElementById(
-      "manual"
-    ).value;
-
+    document
+      .getElementById("manual")
+      .value;
 
   checkTicket(
     value
   );
+
 }
 
 
-/*************************************************
- * LADEN
- *************************************************/
+/* =================================================
+   LOADING
+================================================= */
 
-function showLoading(
-  message
-) {
+function showLoading() {
 
-  document.getElementById(
-    "status"
-  ).className =
-    "status";
+  document
+    .getElementById("status")
+    .innerHTML = `
 
+      <div class="status">
 
-  document.getElementById(
-    "status"
-  ).innerHTML = `
+        <div class="status-icon">
+          …
+        </div>
 
-    <div class="icon">
-      ⏳
-    </div>
+        <div class="status-title">
+          TICKET WIRD GEPRÜFT
+        </div>
 
-    <div class="title">
-      ${escapeHtml(
-        message
-      )}
-    </div>
+        <div class="status-info">
+          Einen Moment bitte …
+        </div>
 
-  `;
+      </div>
+
+    `;
+
 }
 
 
-/*************************************************
- * FEHLER
- *************************************************/
+/* =================================================
+   FEHLER
+================================================= */
 
 function showError(
   message
 ) {
 
-  document.getElementById(
-    "status"
-  ).className =
-    "status red";
+  document
+    .getElementById("status")
+    .innerHTML = `
 
+      <div class="status status-invalid">
 
-  document.getElementById(
-    "status"
-  ).innerHTML = `
+        <div class="status-icon">
+          ×
+        </div>
 
-    <div class="icon">
-      ❌
-    </div>
+        <div class="status-title">
+          ${escapeHtml(
+            message
+          )}
+        </div>
 
-    <div class="title">
-      ${escapeHtml(
-        message
-      )}
-    </div>
+        <button
+          class="main-button"
+          onclick="resetScanner()"
+        >
 
-    <button
-      onclick="resetScanner()"
-    >
-      ERNEUT VERSUCHEN
-    </button>
+          ERNEUT VERSUCHEN
 
-  `;
+        </button>
+
+      </div>
+
+    `;
 
 }
 
 
-/*************************************************
- * SCANNER ZURÜCKSETZEN
- *************************************************/
+/* =================================================
+   RESET
+================================================= */
 
 function resetScanner() {
 
-  location.reload();
+  locked = false;
+
+  document
+    .getElementById("status")
+    .innerHTML = "";
+
+  document
+    .getElementById("manual")
+    .value = "";
 
 }
 
 
-/*************************************************
- * SICHERHEIT
- *************************************************/
+/* =================================================
+   SICHERHEIT
+================================================= */
 
 function escapeHtml(
   value
@@ -817,20 +1700,11 @@ function escapeHtml(
 
       return {
 
-        "&":
-          "&amp;",
-
-        "<":
-          "&lt;",
-
-        ">":
-          "&gt;",
-
-        '"':
-          "&quot;",
-
-        "'":
-          "&#039;"
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
 
       }[char];
 
@@ -859,13 +1733,21 @@ function escapeJs(
 }
 
 
-/*************************************************
- * START
- *************************************************/
+/* =================================================
+   START
+================================================= */
 
-startScanner();
+setTimeout(
+  function() {
+
+    startScanner();
+
+  },
+  2500
+);
 
 </script>
 
 </body>
+
 </html>
