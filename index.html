@@ -11,18 +11,13 @@
                maximum-scale=1.0,
                user-scalable=no">
 
-<meta name="theme-color"
-      content="#111111">
+<meta name="theme-color" content="#111111">
 
-<title>JB Event Service</title>
+<title>JB Event Service – Einlass</title>
 
 <script src="https://unpkg.com/html5-qrcode"></script>
 
 <style>
-
-/* =================================================
-   GRUNDLAYOUT
-================================================= */
 
 * {
   box-sizing: border-box;
@@ -35,8 +30,8 @@ body {
   padding: 0;
   width: 100%;
   min-height: 100%;
-  background: #111111;
-  color: #ffffff;
+  background: #111;
+  color: white;
   font-family:
     -apple-system,
     BlinkMacSystemFont,
@@ -51,24 +46,19 @@ body {
 }
 
 
-/* =================================================
-   SPLASH SCREEN
-================================================= */
+/* =========================
+   SPLASH
+========================= */
 
 #splash {
 
   position: fixed;
-
   inset: 0;
-
   z-index: 9999;
 
   display: flex;
-
   flex-direction: column;
-
   justify-content: center;
-
   align-items: center;
 
   background:
@@ -80,42 +70,35 @@ body {
     );
 
   transition:
-    opacity 0.8s ease,
-    visibility 0.8s ease;
-
+    opacity .8s ease,
+    visibility .8s ease;
 }
-
 
 #splash.hide {
-
   opacity: 0;
-
   visibility: hidden;
-
 }
-
 
 .splash-logo {
 
   width: 230px;
-
   max-width: 70vw;
+
+  object-fit: contain;
 
   filter: invert(1);
 
   opacity: 0;
 
   transform:
-    scale(0.92)
+    scale(.92)
     translateY(10px);
 
   animation:
     logoIn 1.1s
     cubic-bezier(.2,.8,.2,1)
     forwards;
-
 }
-
 
 .splash-slogan {
 
@@ -134,41 +117,34 @@ body {
   animation:
     sloganIn 1s
     ease
-    0.6s
+    .6s
     forwards;
-
 }
-
 
 @keyframes logoIn {
 
   to {
-
     opacity: 1;
 
     transform:
       scale(1)
       translateY(0);
-
   }
 
 }
-
 
 @keyframes sloganIn {
 
   to {
-
     opacity: 1;
-
   }
 
 }
 
 
-/* =================================================
+/* =========================
    APP
-================================================= */
+========================= */
 
 #app {
 
@@ -186,11 +162,9 @@ body {
     translateY(15px);
 
   transition:
-    opacity 0.8s ease,
-    transform 0.8s ease;
-
+    opacity .8s ease,
+    transform .8s ease;
 }
-
 
 #app.show {
 
@@ -198,24 +172,19 @@ body {
 
   transform:
     translateY(0);
-
 }
-
 
 .app-container {
 
   width: 100%;
-
   max-width: 520px;
-
   margin: auto;
-
 }
 
 
-/* =================================================
+/* =========================
    HEADER
-================================================= */
+========================= */
 
 .header {
 
@@ -226,9 +195,7 @@ body {
   justify-content: space-between;
 
   margin-bottom: 24px;
-
 }
-
 
 .header-brand {
 
@@ -237,31 +204,23 @@ body {
   align-items: center;
 
   gap: 12px;
-
 }
-
 
 .header-logo {
 
   width: 55px;
-
   height: 55px;
 
   object-fit: contain;
 
   filter: invert(1);
-
 }
-
 
 .header-text {
 
   display: flex;
-
   flex-direction: column;
-
 }
-
 
 .brand-name {
 
@@ -270,9 +229,7 @@ body {
   font-weight: 600;
 
   letter-spacing: 2px;
-
 }
-
 
 .brand-sub {
 
@@ -283,9 +240,7 @@ body {
   color: #888;
 
   letter-spacing: 1px;
-
 }
-
 
 .live-indicator {
 
@@ -296,31 +251,27 @@ body {
   gap: 7px;
 
   padding:
-    8px
-    11px;
+    8px 11px;
 
   border-radius: 30px;
 
   background:
-    rgba(255,255,255,0.06);
+    rgba(255,255,255,.06);
 
   border:
     1px solid
-    rgba(255,255,255,0.08);
+    rgba(255,255,255,.08);
 
   color: #aaa;
 
   font-size: 10px;
 
   letter-spacing: 1px;
-
 }
-
 
 .live-dot {
 
   width: 7px;
-
   height: 7px;
 
   border-radius: 50%;
@@ -330,13 +281,12 @@ body {
   box-shadow:
     0 0 10px
     rgba(110,231,160,.7);
-
 }
 
 
-/* =================================================
-   EVENT CARD
-================================================= */
+/* =========================
+   EVENT
+========================= */
 
 .event-card {
 
@@ -357,16 +307,14 @@ body {
 
   border:
     1px solid
-    rgba(255,255,255,0.08);
+    rgba(255,255,255,.08);
 
   box-shadow:
     0 20px 50px
     rgba(0,0,0,.35);
 
   margin-bottom: 20px;
-
 }
-
 
 .event-card::after {
 
@@ -375,20 +323,16 @@ body {
   position: absolute;
 
   width: 180px;
-
   height: 180px;
 
   right: -80px;
-
   top: -80px;
 
   border-radius: 50%;
 
   background:
     rgba(255,255,255,.035);
-
 }
-
 
 .event-small {
 
@@ -399,9 +343,7 @@ body {
   letter-spacing: 3px;
 
   text-transform: uppercase;
-
 }
-
 
 .event-title {
 
@@ -411,10 +353,8 @@ body {
 
   font-weight: 700;
 
-  letter-spacing: -0.8px;
-
+  letter-spacing: -.8px;
 }
-
 
 .event-subtitle {
 
@@ -423,13 +363,12 @@ body {
   font-size: 13px;
 
   color: #aaa;
-
 }
 
 
-/* =================================================
-   SCANNER CARD
-================================================= */
+/* =========================
+   SCANNER
+========================= */
 
 .scanner-card {
 
@@ -437,8 +376,7 @@ body {
 
   border-radius: 27px;
 
-  background:
-    #1b1b1b;
+  background: #1b1b1b;
 
   border:
     1px solid
@@ -447,9 +385,7 @@ body {
   box-shadow:
     0 25px 60px
     rgba(0,0,0,.35);
-
 }
-
 
 #reader {
 
@@ -462,9 +398,7 @@ body {
   border-radius: 20px;
 
   background: #0c0c0c;
-
 }
-
 
 #reader video {
 
@@ -473,20 +407,12 @@ body {
   height: auto !important;
 
   border-radius: 20px;
-
 }
-
 
 #reader img {
 
   display: none !important;
-
 }
-
-
-/* =================================================
-   SCANNER HINWEIS
-================================================= */
 
 .scanner-hint {
 
@@ -498,31 +424,28 @@ body {
 
   gap: 8px;
 
-  padding: 14px 5px 5px;
+  padding:
+    14px 5px 5px;
 
   color: #777;
 
   font-size: 11px;
-
 }
-
 
 .scanner-hint-dot {
 
   width: 5px;
-
   height: 5px;
 
   background: #777;
 
   border-radius: 50%;
-
 }
 
 
-/* =================================================
-   MANUELLE EINGABE
-================================================= */
+/* =========================
+   MANUEL
+========================= */
 
 .manual-card {
 
@@ -546,9 +469,7 @@ body {
   box-shadow:
     0 15px 40px
     rgba(0,0,0,.25);
-
 }
-
 
 .input-label {
 
@@ -561,9 +482,7 @@ body {
   letter-spacing: 1.5px;
 
   text-transform: uppercase;
-
 }
-
 
 input {
 
@@ -572,56 +491,45 @@ input {
   height: 54px;
 
   padding:
-    0
-    16px;
+    0 16px;
 
   border:
-    1px solid
-    #333;
+    1px solid #333;
 
   border-radius: 15px;
 
   outline: none;
 
-  background:
-    #101010;
+  background: #101010;
 
-  color: #ffffff;
+  color: white;
 
   font-size: 15px;
 
-  font-family:
-    monospace;
+  font-family: monospace;
 
   transition:
     border .2s ease,
     box-shadow .2s ease;
-
 }
-
 
 input:focus {
 
-  border-color:
-    #777;
+  border-color: #777;
 
   box-shadow:
     0 0 0 3px
     rgba(255,255,255,.04);
-
 }
-
 
 input::placeholder {
-
   color: #555;
-
 }
 
 
-/* =================================================
+/* =========================
    BUTTON
-================================================= */
+========================= */
 
 .main-button {
 
@@ -659,9 +567,7 @@ input::placeholder {
   transition:
     transform .15s ease,
     box-shadow .15s ease;
-
 }
-
 
 .main-button:active {
 
@@ -671,13 +577,12 @@ input::placeholder {
   box-shadow:
     0 5px 15px
     rgba(0,0,0,.25);
-
 }
 
 
-/* =================================================
+/* =========================
    STATUS
-================================================= */
+========================= */
 
 .status {
 
@@ -706,43 +611,29 @@ input::placeholder {
 
   animation:
     statusIn .35s ease;
-
 }
-
 
 @keyframes statusIn {
 
   from {
-
     opacity: 0;
-
-    transform:
-      translateY(10px);
-
+    transform: translateY(10px);
   }
 
   to {
-
     opacity: 1;
-
-    transform:
-      translateY(0);
-
+    transform: translateY(0);
   }
 
 }
 
-
 .status-icon {
 
   width: 64px;
-
   height: 64px;
 
   margin:
-    0
-    auto
-    15px;
+    0 auto 15px;
 
   display: flex;
 
@@ -753,9 +644,7 @@ input::placeholder {
   border-radius: 50%;
 
   font-size: 29px;
-
 }
-
 
 .status-valid {
 
@@ -765,9 +654,7 @@ input::placeholder {
 
   background:
     rgba(110,231,160,.08);
-
 }
-
 
 .status-invalid {
 
@@ -777,9 +664,7 @@ input::placeholder {
 
   background:
     rgba(255,90,90,.08);
-
 }
-
 
 .status-used {
 
@@ -789,18 +674,14 @@ input::placeholder {
 
   background:
     rgba(255,190,70,.08);
-
 }
-
 
 .status-title {
 
   font-size: 23px;
 
   font-weight: 700;
-
 }
-
 
 .status-info {
 
@@ -811,20 +692,16 @@ input::placeholder {
   line-height: 1.7;
 
   font-size: 14px;
-
 }
-
 
 .status-name {
 
-  color: #fff;
+  color: white;
 
   font-size: 19px;
 
   font-weight: 600;
-
 }
-
 
 .ticket-id {
 
@@ -842,13 +719,12 @@ input::placeholder {
   font-family: monospace;
 
   font-size: 12px;
-
 }
 
 
-/* =================================================
+/* =========================
    FOOTER
-================================================= */
+========================= */
 
 .footer {
 
@@ -861,28 +737,21 @@ input::placeholder {
   font-size: 10px;
 
   letter-spacing: 1.5px;
-
 }
 
 
-/* =================================================
+/* =========================
    MOBILE
-================================================= */
+========================= */
 
-@media (
-  max-width: 380px
-) {
+@media (max-width: 380px) {
 
   .event-title {
-
     font-size: 25px;
-
   }
 
   .event-card {
-
     padding: 21px;
-
   }
 
 }
@@ -895,9 +764,9 @@ input::placeholder {
 <body>
 
 
-<!-- =================================================
+<!-- =========================
      SPLASH
-================================================= -->
+========================= -->
 
 <div id="splash">
 
@@ -908,24 +777,20 @@ input::placeholder {
   >
 
   <div class="splash-slogan">
-
     DEIN EVENT. UNSER SERVICE.
-
   </div>
 
 </div>
 
 
-<!-- =================================================
+<!-- =========================
      APP
-================================================= -->
+========================= -->
 
 <div id="app">
 
 <div class="app-container">
 
-
-  <!-- HEADER -->
 
   <div class="header">
 
@@ -1019,9 +884,7 @@ input::placeholder {
       class="main-button"
       onclick="manualCheck()"
     >
-
       TICKET PRÜFEN
-
     </button>
 
   </div>
@@ -1031,8 +894,6 @@ input::placeholder {
 
   <div id="status"></div>
 
-
-  <!-- FOOTER -->
 
   <div class="footer">
 
@@ -1059,6 +920,213 @@ const SCRIPT_URL =
 let scanner = null;
 
 let locked = false;
+
+
+/* =================================================
+   AUDIO
+================================================= */
+
+let audioContext = null;
+
+
+function getAudioContext() {
+
+  if (!audioContext) {
+
+    const AudioContext =
+      window.AudioContext ||
+      window.webkitAudioContext;
+
+    if (AudioContext) {
+      audioContext =
+        new AudioContext();
+    }
+
+  }
+
+  if (
+    audioContext &&
+    audioContext.state === "suspended"
+  ) {
+
+    audioContext.resume();
+
+  }
+
+  return audioContext;
+}
+
+
+function playBeep(
+  frequency,
+  duration,
+  volume,
+  type = "sine"
+) {
+
+  const ctx =
+    getAudioContext();
+
+  if (!ctx) return;
+
+  const oscillator =
+    ctx.createOscillator();
+
+  const gain =
+    ctx.createGain();
+
+  oscillator.type = type;
+
+  oscillator.frequency.value =
+    frequency;
+
+  gain.gain.setValueAtTime(
+    0.0001,
+    ctx.currentTime
+  );
+
+  gain.gain.exponentialRampToValueAtTime(
+    volume,
+    ctx.currentTime + 0.01
+  );
+
+  gain.gain.exponentialRampToValueAtTime(
+    0.0001,
+    ctx.currentTime + duration
+  );
+
+  oscillator.connect(gain);
+
+  gain.connect(ctx.destination);
+
+  oscillator.start();
+
+  oscillator.stop(
+    ctx.currentTime + duration + 0.02
+  );
+}
+
+
+function playTone(type) {
+
+  const ctx =
+    getAudioContext();
+
+  if (!ctx) return;
+
+
+  if (type === "success") {
+
+    playBeep(
+      880,
+      0.12,
+      0.16
+    );
+
+    setTimeout(
+      () => playBeep(
+        1175,
+        0.16,
+        0.16
+      ),
+      120
+    );
+
+  }
+
+
+  else if (type === "warning") {
+
+    playBeep(
+      420,
+      0.18,
+      0.18,
+      "triangle"
+    );
+
+    setTimeout(
+      () => playBeep(
+        330,
+        0.18,
+        0.18,
+        "triangle"
+      ),
+      170
+    );
+
+  }
+
+
+  else if (type === "error") {
+
+    playBeep(
+      260,
+      0.22,
+      0.2,
+      "sawtooth"
+    );
+
+    setTimeout(
+      () => playBeep(
+        180,
+        0.28,
+        0.18,
+        "sawtooth"
+      ),
+      220
+    );
+
+  }
+
+
+  else if (type === "entry") {
+
+    playBeep(
+      660,
+      0.10,
+      0.15
+    );
+
+    setTimeout(
+      () => playBeep(
+        990,
+        0.15,
+        0.17
+      ),
+      110
+    );
+
+  }
+
+}
+
+
+/* =================================================
+   VIBRATION
+================================================= */
+
+function vibrate(pattern) {
+
+  try {
+
+    if (
+      "vibrate" in navigator
+    ) {
+
+      navigator.vibrate(
+        pattern
+      );
+
+    }
+
+  } catch (e) {
+
+    // iPhone/Safari unterstützt
+    // navigator.vibrate nicht zuverlässig.
+
+  }
+
+}
 
 
 /* =================================================
@@ -1091,7 +1159,7 @@ window.addEventListener(
 
 
 /* =================================================
-   SCANNER STARTEN
+   SCANNER
 ================================================= */
 
 function startScanner() {
@@ -1111,12 +1179,14 @@ function startScanner() {
       },
 
       {
+
         fps: 10,
 
         qrbox: {
           width: 230,
           height: 230
         }
+
       },
 
       function(decodedText) {
@@ -1140,6 +1210,7 @@ function startScanner() {
       }
 
     )
+
     .catch(
       function() {
 
@@ -1158,7 +1229,8 @@ function startScanner() {
               font-size:13px;
             ">
 
-              Kamera konnte nicht gestartet werden.<br>
+              Kamera konnte nicht gestartet werden.<br><br>
+
               Bitte Kameraberechtigung prüfen.
 
             </div>
@@ -1175,9 +1247,7 @@ function startScanner() {
    QR VERARBEITEN
 ================================================= */
 
-function processQR(
-  text
-) {
+function processQR(text) {
 
   let ticketId =
     String(text)
@@ -1190,9 +1260,7 @@ function processQR(
       new URL(text);
 
     const id =
-      url.searchParams.get(
-        "id"
-      );
+      url.searchParams.get("id");
 
     if (id) {
 
@@ -1201,6 +1269,7 @@ function processQR(
     }
 
   }
+
   catch(e) {
 
     // Direkte Ticket-ID
@@ -1219,9 +1288,7 @@ function processQR(
    TICKET PRÜFEN
 ================================================= */
 
-function checkTicket(
-  ticketId
-) {
+function checkTicket(ticketId) {
 
   ticketId =
     String(ticketId || "")
@@ -1231,8 +1298,14 @@ function checkTicket(
 
   if (!ticketId) {
 
+    playTone("error");
+
+    vibrate(
+      [180,80,180]
+    );
+
     showError(
-      "Keine Ticket-ID erkannt."
+      "KEINE TICKET-ID"
     );
 
     return;
@@ -1286,8 +1359,14 @@ function checkTicket(
         callbackName
       ];
 
+      playTone("error");
+
+      vibrate(
+        [180,80,180]
+      );
+
       showError(
-        "Verbindung zum Ticketsystem fehlgeschlagen."
+        "VERBINDUNG FEHLGESCHLAGEN"
       );
 
     };
@@ -1304,12 +1383,16 @@ function checkTicket(
    TICKET ANZEIGEN
 ================================================= */
 
-function displayTicket(
-  ticket
-) {
+function displayTicket(ticket) {
 
 
   if (!ticket.found) {
+
+    playTone("error");
+
+    vibrate(
+      [180,80,180]
+    );
 
     showError(
       "TICKET NICHT GEFUNDEN"
@@ -1320,9 +1403,18 @@ function displayTicket(
   }
 
 
+  /* BEREITS EINGELÖST */
+
   if (
     ticket.alreadyUsed
   ) {
+
+    playTone("warning");
+
+    vibrate(
+      [120,70,120]
+    );
+
 
     document
       .getElementById("status")
@@ -1341,9 +1433,11 @@ function displayTicket(
           <div class="status-info">
 
             <div class="status-name">
+
               ${escapeHtml(
                 ticket.name
               )}
+
             </div>
 
             ${escapeHtml(
@@ -1376,6 +1470,13 @@ function displayTicket(
     return;
 
   }
+
+
+  /* GÜLTIG */
+
+  playTone("success");
+
+  vibrate(90);
 
 
   document
@@ -1446,9 +1547,7 @@ function displayTicket(
    EINLASS
 ================================================= */
 
-function redeemTicket(
-  ticketId
-) {
+function redeemTicket(ticketId) {
 
   showLoading();
 
@@ -1464,6 +1563,13 @@ function redeemTicket(
       if (
         result.success
       ) {
+
+        playTone("entry");
+
+        vibrate(
+          [70,60,70]
+        );
+
 
         document
           .getElementById("status")
@@ -1520,12 +1626,34 @@ function redeemTicket(
 
           `;
 
+
+        /*
+          Automatisch nach 2,5 Sekunden
+          zum nächsten Ticket.
+        */
+
+        setTimeout(
+          function() {
+
+            resetScanner();
+
+          },
+          2500
+        );
+
       }
+
       else {
+
+        playTone("error");
+
+        vibrate(
+          [180,80,180]
+        );
 
         showError(
           result.message ||
-          "Ticket konnte nicht eingelöst werden."
+          "TICKET KONNTE NICHT EINGELÖST WERDEN"
         );
 
       }
@@ -1562,8 +1690,14 @@ function redeemTicket(
         callbackName
       ];
 
+      playTone("error");
+
+      vibrate(
+        [180,80,180]
+      );
+
       showError(
-        "Verbindung fehlgeschlagen."
+        "VERBINDUNG FEHLGESCHLAGEN"
       );
 
     };
@@ -1587,11 +1721,34 @@ function manualCheck() {
       .getElementById("manual")
       .value;
 
+
   checkTicket(
     value
   );
 
 }
+
+
+/* =================================================
+   ENTER-TASTE
+================================================= */
+
+document
+  .getElementById("manual")
+  .addEventListener(
+    "keydown",
+    function(event) {
+
+      if (
+        event.key === "Enter"
+      ) {
+
+        manualCheck();
+
+      }
+
+    }
+  );
 
 
 /* =================================================
@@ -1629,9 +1786,7 @@ function showLoading() {
    FEHLER
 ================================================= */
 
-function showError(
-  message
-) {
+function showError(message) {
 
   document
     .getElementById("status")
@@ -1644,9 +1799,11 @@ function showError(
         </div>
 
         <div class="status-title">
+
           ${escapeHtml(
             message
           )}
+
         </div>
 
         <button
@@ -1673,13 +1830,31 @@ function resetScanner() {
 
   locked = false;
 
+
   document
     .getElementById("status")
     .innerHTML = "";
 
+
   document
     .getElementById("manual")
     .value = "";
+
+
+  /*
+    Eingabefeld wieder bereit machen.
+  */
+
+  setTimeout(
+    function() {
+
+      document
+        .getElementById("manual")
+        .blur();
+
+    },
+    50
+  );
 
 }
 
@@ -1688,9 +1863,7 @@ function resetScanner() {
    SICHERHEIT
 ================================================= */
 
-function escapeHtml(
-  value
-) {
+function escapeHtml(value) {
 
   return String(
     value
@@ -1714,21 +1887,17 @@ function escapeHtml(
 }
 
 
-function escapeJs(
-  value
-) {
+function escapeJs(value) {
 
-  return String(
-    value
-  )
-  .replace(
-    /\\/g,
-    "\\\\"
-  )
-  .replace(
-    /'/g,
-    "\\'"
-  );
+  return String(value)
+    .replace(
+      /\\/g,
+      "\\\\"
+    )
+    .replace(
+      /'/g,
+      "\\'"
+    );
 
 }
 
